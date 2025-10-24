@@ -1,18 +1,15 @@
 from openai import OpenAI
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
-# ==== TOKENS ====
-TELEGRAM_TOKEN = "TELEGRAM_TOKEN_BURGA_YANGI_KIRITASIZ"
-OPENAI_API_KEY = "sk-proj-xxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-# =================
+# Tokens
+TELEGRAM_TOKEN = "8280569385:AAFF5QyxoXtMw-Q0MlB4Y4ns5cbOynee3ww"
+OPENAI_API_KEY = "SIZNING OPENAI API KEY"
 
 client = OpenAI(api_key=OPENAI_API_KEY)
 
 
 def start(update, context):
-    update.message.reply_text(
-        "Assalomu alaykum! Savolingizni yozing, men javob beraman 🤖"
-    )
+    update.message.reply_text("Assalomu alaykum! Savolingizni yozing, men javob beraman 🤖")
 
 
 def ask_ai(question):
@@ -20,11 +17,11 @@ def ask_ai(question):
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
-                {"role": "system", "content": "Siz foydalanuvchining savollariga o'zbek tilida tushunarli qilib javob beradigan yordamchisiz."},
+                {"role": "system", "content": "Siz foydalanuvchining savollariga o'zbek tilida javob beradigan yordamchisiz."},
                 {"role": "user", "content": question}
             ],
             max_tokens=300,
-            temperature=0.8
+            temperature=0.7
         )
         return response.choices[0].message.content
     except Exception as e:
