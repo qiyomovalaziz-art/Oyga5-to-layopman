@@ -2,7 +2,7 @@ import openai
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 # ==== BU YERGA TOKENLARNI KIRITING ====
-TELEGRAM_TOKEN = "8245974811:AAEkryr5_vYZ4m_1M8D56tIrViMe3Iwhmpc"
+TELEGRAM_TOKEN = "8280569385:AAFF5QyxoXtMw-Q0MlB4Y4ns5cbOynee3ww"
 OPENAI_API_KEY = "BU_YERGA_OPENAI_API_KEYNI_YOZING"
 # ======================================
 
