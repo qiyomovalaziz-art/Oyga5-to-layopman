@@ -3,7 +3,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 # Tokens
 TELEGRAM_TOKEN = "8280569385:AAFF5QyxoXtMw-Q0MlB4Y4ns5cbOynee3ww"
-OPENAI_API_KEY = "SIZNING OPENAI API KEY"
+OPENAI_API_KEY = "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"
 
 client = OpenAI(api_key=OPENAI_API_KEY)
 
