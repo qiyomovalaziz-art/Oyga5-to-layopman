@@ -12,7 +12,7 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=OPENAI_API_KEY)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Assalomu alaykum! Savolingizni yozing ✍️Baxtiyorovna_r ChatGPT Boti javob beradi👌")
+    await update.message.reply_text("Assalomu alaykum! Savolingizni yozing ✍️Baxtiyorovna_rChatGPT Boti javob beradi👌")
 
 async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_msg = update.message.text
