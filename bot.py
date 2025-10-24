@@ -1,9 +1,10 @@
-from openai import OpenAI
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from openai import OpenAI
 
-# Tokens
+# ===== TOKENLAR =====
 TELEGRAM_TOKEN = "8280569385:AAFF5QyxoXtMw-Q0MlB4Y4ns5cbOynee3ww"
 OPENAI_API_KEY = "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"
+# ====================
 
 client = OpenAI(api_key=OPENAI_API_KEY)
 
@@ -17,15 +18,14 @@ def ask_ai(question):
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
-                {"role": "system", "content": "Siz foydalanuvchining savollariga o'zbek tilida javob beradigan yordamchisiz."},
+                {"role": "system", "content": "Siz foydalanuvchiga o'zbek tilida javob beradigan yordamchisiz."},
                 {"role": "user", "content": question}
             ],
             max_tokens=300,
             temperature=0.7
         )
-        return response.choices[0].message.content
+        return response.choices[0].message.content.strip()
     except Exception as e:
-        print("Xatolik:", e)
         return "⚠️ Xatolik yuz berdi. Keyinroq urinib ko‘ring."
 
 
@@ -41,7 +41,7 @@ def main():
     dp = updater.dispatcher
 
     dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(MessageHandler(Filters.text & ~Filters.command, message_handler))
+    dp.add_handler(MessageHandler(Filters.text, message_handler))
 
     updater.start_polling()
     updater.idle()
