@@ -11,7 +11,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Tokenlar / API kalitlar
-TELEGRAM_TOKEN = os.getenv("8280569385:AAFF5QyxoXtMw-Q0MlB4Y4ns5cbOynee3ww")
+TELEGRAM_TOKEN = os.getenv("8280569385:AAHrAXpAae0uUyg_cSa08RUPRtsFjqK1_64")
 OPENAI_API_KEY = os.getenv("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")
 
 openai.api_key = OPENAI_API_KEY
