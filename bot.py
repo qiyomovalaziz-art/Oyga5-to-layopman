@@ -1,56 +1,46 @@
 import os
-import logging
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-import openai
+from dotenv import load_dotenv
+from telegram import Update
+from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
+from openai import OpenAI
 
-# Logging sozlamalari
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO
-)
-logger = logging.getLogger(__name__)
+# .env dagi kalitlarni yuklash
+load_dotenv()
 
-# Tokenlar / API kalitlar
-TELEGRAM_TOKEN = ("8280569385:AAHrAXpAae0uUyg_cSa08RUPRtsFjqK1_64")
-OPENAI_API_KEY = os.getenv("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")
+TELEGRAM_TOKEN = ("8280569385:AAHORjKjv3IGAT6G_EC7sZKu8UFlzLWP_Hc")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-openai.api_key = OPENAI_API_KEY
+client = OpenAI(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)
 
-def start(update, context):
-    update.message.reply_text("Assalomu alaykum! Savolingizni yozing, men javob beraman 🤖")
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("Assalomu alaykum 😊\nSavolingizni yozing, men javob beraman!")
 
-def ask_ai(question: str) -> str:
+async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_msg = update.message.text
+
     try:
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
             messages=[
-                {"role": "system", "content": "Siz foydalanuvchining savollariga o‘zbek tilida javob beradigan yordamchisiz."},
-                {"role": "user", "content": question}
-            ],
-            max_tokens=300,
-            temperature=0.7
+                {"role": "system", "content": "Sen foydalanuvchiga yordam beruvchi o‘zbekcha AI botsan."},
+                {"role": "user", "content": user_msg}
+            ]
         )
-        answer = response.choices[0].message.content.strip()
-        return answer
-    except Exception as e:
-        logger.error(f"OpenAI bilan muammo: {e}")
-        return "⚠️ Xatolik yuz berdi. Keyinroq urinib ko‘ring."
 
-def message_handler(update, context):
-    user_text = update.message.text
-    update.message.reply_text("⏳ Javob tayyorlanmoqda…")
-    answer = ask_ai(user_text)
-    update.message.reply_text(answer)
+        answer = response.choices[0].message.content
+        await update.message.reply_text(answer)
+
+    except Exception as e:
+        print("Xato:", e)
+        await update.message.reply_text("⚠️ Xatolik yuz berdi. Keyinroq qayta urinib ko‘ring.")
 
 def main():
-    updater = Updater(TELEGRAM_TOKEN, use_context=True)
-    dp = updater.dispatcher
+    app = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
 
-    dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(MessageHandler(Filters.text & ~Filters.command, message_handler))
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_handler))
 
-    updater.start_polling()
-    updater.idle()
+    app.run_polling()
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
