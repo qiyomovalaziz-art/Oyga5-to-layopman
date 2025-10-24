@@ -1,38 +1,40 @@
-import openai
+from openai import OpenAI
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
-# ==== BU YERGA TOKENLARNI KIRITING ====
-TELEGRAM_TOKEN = "8280569385:AAFF5QyxoXtMw-Q0MlB4Y4ns5cbOynee3ww"
-OPENAI_API_KEY = "BU_YERGA_OPENAI_API_KEYNI_YOZING"
-# ======================================
+# ==== TOKENS ====
+TELEGRAM_TOKEN = "TELEGRAM_TOKEN_BURGA_YANGI_KIRITASIZ"
+OPENAI_API_KEY = "sk-proj-xxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+# =================
 
-openai.api_key = OPENAI_API_KEY
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 
 def start(update, context):
-    update.message.reply_text("Assalomu alaykum! Savolingizni yozing, men javob beraman 🤖")
+    update.message.reply_text(
+        "Assalomu alaykum! Savolingizni yozing, men javob beraman 🤖"
+    )
 
 
 def ask_ai(question):
     try:
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",   # AI modeli
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
             messages=[
-                {"role": "system", "content": "Siz foydalanuvchining savollariga o'zbek tilida javob beradigan yordamchisiz."},
+                {"role": "system", "content": "Siz foydalanuvchining savollariga o'zbek tilida tushunarli qilib javob beradigan yordamchisiz."},
                 {"role": "user", "content": question}
             ],
             max_tokens=300,
             temperature=0.8
         )
-        answer = response.choices[0].message.content.strip()
-        return answer
-    except:
+        return response.choices[0].message.content
+    except Exception as e:
+        print("Xatolik:", e)
         return "⚠️ Xatolik yuz berdi. Keyinroq urinib ko‘ring."
 
 
 def message_handler(update, context):
     user_text = update.message.text
-    update.message.reply_text("⏳ Javob tayyorlanyapti...")
+    update.message.reply_text("⏳ Javob tayyorlanmoqda...")
     answer = ask_ai(user_text)
     update.message.reply_text(answer)
 
@@ -42,7 +44,7 @@ def main():
     dp = updater.dispatcher
 
     dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(MessageHandler(Filters.text, message_handler))
+    dp.add_handler(MessageHandler(Filters.text & ~Filters.command, message_handler))
 
     updater.start_polling()
     updater.idle()
